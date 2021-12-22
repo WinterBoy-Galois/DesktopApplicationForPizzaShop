@@ -1,0 +1,261 @@
+﻿<Window x:Class="AMDProject.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:AMDProject"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="681" Width="800" ResizeMode="NoResize">
+	<Grid>
+		<TabControl HorizontalAlignment="Center" Height="634" VerticalAlignment="Center" Width="762">
+			<TabItem Header="Customer">
+				<Grid>
+					<Grid.ColumnDefinitions>
+						<ColumnDefinition Width="75*"/>
+						<ColumnDefinition Width="34*"/>
+						<ColumnDefinition Width="647*"/>
+					</Grid.ColumnDefinitions>
+					<GroupBox Grid.ColumnSpan="3" Header="Avaliable Ingredients" HorizontalAlignment="Left" Height="221" Margin="16,23,0,0" VerticalAlignment="Top" Width="357">
+						<ListView x:Name="listViewCustomerIngredients" Margin="0,0,-2,0" Height="190">
+							<ListView.View>
+								<GridView>
+									<GridViewColumn Header="Name" DisplayMemberBinding="{Binding Name}" Width="100"/>
+									<GridViewColumn Header="Region" DisplayMemberBinding="{Binding Region}" Width="100"/>
+									<GridViewColumn Header="Price" DisplayMemberBinding="{Binding Price}" Width="60"/>
+									<GridViewColumn Header="Stock" DisplayMemberBinding="{Binding Stock}" Width="60"/>
+								</GridView>
+							</ListView.View>
+						</ListView>
+					</GroupBox>
+					<GroupBox Grid.ColumnSpan="3" Header="Composed Pizzas" HorizontalAlignment="Left" Height="187" Margin="19,249,0,0" VerticalAlignment="Top" Width="480">
+						<ListView x:Name="listViewCustomerComposedPizzas" Height="154" Margin="0,0,3,0">
+							<ListView.View>
+								<GridView>
+									<GridViewColumn Header="Base Pizza" DisplayMemberBinding="{Binding Flavour}" Width="100" />
+									<GridViewColumn Header="Size" DisplayMemberBinding="{Binding Size}" Width="50" />
+									<GridViewColumn Header="Ingredients" DisplayMemberBinding="{Binding IngredientsName}" Width="180" />
+									<GridViewColumn Header="Price" DisplayMemberBinding="{Binding Price}" Width="50" />
+									<GridViewColumn Header="Order" Width="70">
+										<GridViewColumn.CellTemplate>
+											<DataTemplate>
+												<Button Content="✓" Background="Aqua" BorderBrush="Black" FontWeight="Bold" Padding="5,2" Tag="{Binding id}" CommandParameter="{Binding id}" Click="orderNewPizza" />
+											</DataTemplate>
+										</GridViewColumn.CellTemplate>
+									</GridViewColumn>
+								</GridView>
+							</ListView.View>
+						</ListView>
+					</GroupBox>
+					<GroupBox Grid.ColumnSpan="3" Header="Ordered Pizzas" HorizontalAlignment="Left" Height="145" Margin="19,441,0,0" VerticalAlignment="Top" Width="480">
+						<ListView  x:Name="listViewOrderedPizzasCustomer" HorizontalAlignment="Left" Height="122" VerticalAlignment="Center" Width="467">
+							<ListView.View>
+								<GridView>
+									<GridViewColumn Header="Base Pizza" Width="100" DisplayMemberBinding="{Binding Flavour}"/>
+									<GridViewColumn Header="Size" Width="50" DisplayMemberBinding="{Binding Size}"/>
+									<GridViewColumn Header="Ingredients" Width="130" DisplayMemberBinding="{Binding Ingredients}"/>
+									<GridViewColumn Header="Price" Width="50" DisplayMemberBinding="{Binding Price}"/>
+									<GridViewColumn Header="Order Time" Width="100" DisplayMemberBinding="{Binding Datetime}"/>
+								</GridView>
+							</ListView.View>
+						</ListView>
+					</GroupBox>
+					<GroupBox Grid.Column="2" Header="Compose Pizza" HorizontalAlignment="Left" Height="221" Margin="269,23,0,0" VerticalAlignment="Top" Width="360">
+						<Grid HorizontalAlignment="Left" Height="202" VerticalAlignment="Top" Width="350">
+							<Grid.RowDefinitions>
+								<RowDefinition Height="50*"/>
+								<RowDefinition Height="139*"/>
+							</Grid.RowDefinitions>
+							<Grid.ColumnDefinitions>
+								<ColumnDefinition Width="80*"/>
+								<ColumnDefinition Width="33*"/>
+								<ColumnDefinition Width="208*"/>
+							</Grid.ColumnDefinitions>
+							<Label Content="Base Pizza" HorizontalAlignment="Center" Height="23" Margin="0,-4,0,0" VerticalAlignment="Top" Width="80"/>
+							<Label Content="Size" HorizontalAlignment="Center" Height="23" Margin="0,32,0,0" VerticalAlignment="Top" Width="80" Grid.RowSpan="2"/>
+							<ComboBox HorizontalAlignment="Left" Height="20" Margin="5,2,0,0" VerticalAlignment="Top" Width="226" x:Name="comboboxBasePizzaCustomer" SelectionChanged="ComposePizzaSelectionChanged" Grid.Column="1" Grid.ColumnSpan="2"/>
+							<ComboBox HorizontalAlignment="Left" Height="20" Margin="5,32,0,0" VerticalAlignment="Top" Width="119" x:Name="comboboxPizzaSizeCustomer" SelectionChanged="ComposePizzaSelectionChanged" Grid.Column="1" Grid.RowSpan="2" Grid.ColumnSpan="2"/>
+							<Button Content="Compose" HorizontalAlignment="Left" Margin="120,32,0,1" Height="20" Width="76" Click="composeNewPizza" Grid.Column="2"/>
+							<ListView x:Name="listViewAddIngredients"  Margin="7,10,10,10" Grid.ColumnSpan="3" Grid.Row="1">
+								<ListView.View>
+									<GridView>
+										<GridViewColumn Header="Ingredient" DisplayMemberBinding="{Binding Ingredient}" Width="180" />
+										<GridViewColumn Header="Add" Width="60">
+											<GridViewColumn.CellTemplate>
+												<DataTemplate>
+													<CheckBox Tag="{Binding Id}" IsChecked="{Binding isOrdered}" Checked="setIngredientOrder" Unchecked="setIngredientOrder"/>
+												</DataTemplate>
+											</GridViewColumn.CellTemplate>
+										</GridViewColumn>
+										<GridViewColumn Header="Price" DisplayMemberBinding="{Binding Price}" Width="60" />
+									</GridView>
+								</ListView.View>
+							</ListView>
+						</Grid>
+					</GroupBox>
+				</Grid>
+			</TabItem>
+			<TabItem Header="PizzaBaker">
+				<Grid>
+					<Grid.ColumnDefinitions>
+						<ColumnDefinition Width="12*"/>
+						<ColumnDefinition Width="13*"/>
+						<ColumnDefinition Width="9*"/>
+						<ColumnDefinition Width="722*"/>
+					</Grid.ColumnDefinitions>
+					<!--LURD-->
+					<GroupBox Grid.Column="1" Header="Ordered Pizzas" HorizontalAlignment="Left" Height="186" Margin="7,4,0,0" VerticalAlignment="Top" Width="453" Grid.ColumnSpan="3">
+						<ListView x:Name="listViewOrderedPizzasBaker" HorizontalAlignment="Center" Height="158" VerticalAlignment="Top" Width="440">
+							<ListView.View>
+								<GridView>
+									<GridViewColumn Header="Base Pizza" Width="100" DisplayMemberBinding="{Binding Flavour}"/>
+									<GridViewColumn Header="Size" Width="50" DisplayMemberBinding="{Binding Size}"/>
+									<GridViewColumn Header="Ingredients" Width="130" DisplayMemberBinding="{Binding Ingredients}"/>
+									<GridViewColumn Header="Price" Width="50" DisplayMemberBinding="{Binding Price}"/>
+									<GridViewColumn Header="Order Time" Width="100" DisplayMemberBinding="{Binding Datetime}"/>
+								</GridView>
+							</ListView.View>
+						</ListView>
+					</GroupBox>
+					<GroupBox Grid.ColumnSpan="3" Grid.Column="1" Header="Base Pizzas" HorizontalAlignment="Left" Height="250" Margin="8,197,0,0" VerticalAlignment="Top" Width="291">
+						<Grid HorizontalAlignment="Center" Height="231" VerticalAlignment="Top" Width="284">
+							<Grid.ColumnDefinitions>
+								<ColumnDefinition Width="19*"/>
+								<ColumnDefinition Width="62*"/>
+								<ColumnDefinition Width="204*"/>
+							</Grid.ColumnDefinitions>
+							<TextBox HorizontalAlignment="Left" Height="20" Margin="11,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="140" x:Name="txtBasePizza" Grid.Column="2"/>
+							<Button Content="Add" HorizontalAlignment="Left" Height="20" Margin="90,37,0,0" VerticalAlignment="Top" Width="61" Click="addNewBasePizza" RenderTransformOrigin="-1.571,2.628" Grid.Column="2"/>
+							<TextBox HorizontalAlignment="Left" Height="20" Margin="11,37,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="60" x:Name="txtBasePizzaPrice" Grid.Column="2"/>
+							<ListView x:Name="listViewFlavours" Margin="11,70,10,6" Grid.ColumnSpan="3">
+								<ListView.View>
+									<GridView>
+										<GridViewColumn Header="Base Pizza" DisplayMemberBinding="{Binding Flavour}" Width="190"/>
+										<GridViewColumn Header="Price" DisplayMemberBinding="{Binding Price}" Width="40"/>
+									</GridView>
+								</ListView.View>
+							</ListView>
+							<Label Content="Base Pizza" HorizontalAlignment="Left" Height="29" Margin="6,6,0,0" VerticalAlignment="Top" Width="68" Grid.ColumnSpan="2"/>
+							<Label Content="Price" HorizontalAlignment="Left" Height="26" Margin="6,36,0,0" VerticalAlignment="Top" Width="68" Grid.ColumnSpan="2"/>
+						</Grid>
+					</GroupBox>
+					<GroupBox Grid.ColumnSpan="3" Grid.Column="1" Header="Pizza Sizes" HorizontalAlignment="Left" Height="126" Margin="10,456,0,0" VerticalAlignment="Top" Width="289">
+						<ListView x:Name="listViewSizes" Height="101" Margin="0,0,7,0">
+							<ListView.View>
+								<GridView>
+									<GridViewColumn Header="Name" DisplayMemberBinding="{Binding Name}" Width="130"/>
+									<GridViewColumn Header="Size" DisplayMemberBinding="{Binding Size}" Width="60"/>
+									<GridViewColumn Header="Price" DisplayMemberBinding="{Binding Price}" Width="60"/>
+								</GridView>
+							</ListView.View>
+						</ListView>
+					</GroupBox>
+					<GroupBox Grid.Column="3" Header="Add Stock" HorizontalAlignment="Left" Height="120" Margin="469,7,0,0" VerticalAlignment="Top" Width="235">
+						<Grid HorizontalAlignment="Center" Height="106" VerticalAlignment="Top" Width="224">
+							<Grid.ColumnDefinitions>
+								<ColumnDefinition Width="34*"/>
+								<ColumnDefinition Width="63*"/>
+								<ColumnDefinition Width="15*"/>
+							</Grid.ColumnDefinitions>
+							<Grid.RowDefinitions>
+								<RowDefinition Height="29*"/>
+								<RowDefinition Height="24*"/>
+							</Grid.RowDefinitions>
+							<ComboBox HorizontalAlignment="Left" Height="20" Margin="12,4,0,0" VerticalAlignment="Top" Width="139" x:Name="comboboxIngredients" Grid.ColumnSpan="2" Grid.Column="1"/>
+							<ComboBox HorizontalAlignment="Left" Height="20" Margin="12,38,0,0" VerticalAlignment="Top" Width="139"
+					  x:Name="comboboxSupplier" Grid.ColumnSpan="2" Grid.Column="1"/>
+							<TextBox HorizontalAlignment="Left" Height="20" Margin="12,16,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="79" x:Name="txtStock" Grid.Row="1" Grid.Column="1"/>
+							<Button Content="ADD" HorizontalAlignment="Left" Height="20" Margin="97,16,0,0" VerticalAlignment="Top" Width="54" x:Name="btnAddStock" Click="addNewStock" Grid.Row="1" Grid.ColumnSpan="2" Grid.Column="1"/>
+							<Label Content="Ingredients" HorizontalAlignment="Left" Height="27" Margin="-1,2,0,0" VerticalAlignment="Top" Width="77" Grid.ColumnSpan="2"/>
+							<Label Content="Supplier" HorizontalAlignment="Left" Height="29" Margin="0,35,0,0" Grid.RowSpan="2" VerticalAlignment="Top" Width="72" Grid.ColumnSpan="2"/>
+							<Label Content="Quantity" HorizontalAlignment="Left" Height="28" VerticalAlignment="Top" Width="55" Grid.Row="1" Margin="0,12,0,0"/>
+						</Grid>
+					</GroupBox>
+					<GroupBox Grid.Column="3" Header="Supplier" HorizontalAlignment="Left" Height="223" Margin="451,133,0,0" VerticalAlignment="Top" Width="253">
+						<Grid HorizontalAlignment="Left" Height="204" Margin="-6,0,0,0" VerticalAlignment="Top" Width="251">
+							<Grid.ColumnDefinitions>
+								<ColumnDefinition Width="42*"/>
+								<ColumnDefinition Width="33*"/>
+								<ColumnDefinition Width="10*"/>
+								<ColumnDefinition Width="166*"/>
+							</Grid.ColumnDefinitions>
+							<Grid.RowDefinitions>
+								<RowDefinition Height="31*"/>
+								<RowDefinition Height="42*"/>
+							</Grid.RowDefinitions>
+							<TextBox HorizontalAlignment="Left" Height="20" Margin="26,7,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="115" x:Name="txtSupplierName" Grid.ColumnSpan="3" Grid.Column="1"/>
+							<Button Content="Add" HorizontalAlignment="Left" Height="20" Margin="105,7,0,0" VerticalAlignment="Top" Width="56" x:Name="btnAddSupplier" Click="addNewSupplier" Grid.Column="3"/>
+							<Label Content="Supplier" HorizontalAlignment="Left" Height="27" Margin="1,5,0,0" VerticalAlignment="Top" Width="67" Grid.ColumnSpan="2"/>
+							<ListView x:Name="listViewSuppliers" Width="240" Margin="6,34,5,6" Grid.RowSpan="2" Grid.ColumnSpan="4">
+								<ListView.View>
+									<GridView>
+										<GridViewColumn Header="Name" DisplayMemberBinding="{Binding Name}" Width="90"/>
+										<GridViewColumn Header="Visible" Width="70">
+											<GridViewColumn.CellTemplate>
+												<DataTemplate>
+													<CheckBox Tag="{Binding Id}" IsChecked="{Binding IsVisible}" Checked="SetSupplierVisibility" Unchecked="SetSupplierVisibility"/>
+												</DataTemplate>
+											</GridViewColumn.CellTemplate>
+										</GridViewColumn>
+										<GridViewColumn Header="Deleted">
+											<GridViewColumn.CellTemplate>
+												<DataTemplate>
+													<Button Content="X" Background="Red" BorderBrush="Red" FontWeight="Bold" Padding="5,2" CommandParameter="{Binding Id}" Click="deleteSupplier"/>
+												</DataTemplate>
+											</GridViewColumn.CellTemplate>
+										</GridViewColumn>
+									</GridView>
+								</ListView.View>
+							</ListView>
+						</Grid>
+					</GroupBox>
+					<Grid Grid.Column="3" HorizontalAlignment="Left" Height="60" Margin="292,303,0,0" VerticalAlignment="Top" Width="146"/>
+					<GroupBox Grid.Column="3" Header="Ingredients" HorizontalAlignment="Left" Height="227" Margin="306,355,0,0" VerticalAlignment="Top" Width="398">
+						<Grid HorizontalAlignment="Left" Height="206" VerticalAlignment="Top" Width="397" Margin="5,0,0,0">
+							<Grid.ColumnDefinitions>
+								<ColumnDefinition Width="40*"/>
+								<ColumnDefinition Width="67*"/>
+								<ColumnDefinition Width="290*"/>
+							</Grid.ColumnDefinitions>
+							<Grid.RowDefinitions>
+								<RowDefinition Height="135*"/>
+								<RowDefinition Height="64*"/>
+							</Grid.RowDefinitions>
+							<TextBox HorizontalAlignment="Left" Height="20" Margin="7,26,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="115" x:Name="txtIngredientName" Grid.ColumnSpan="3"/>
+							<Button Content="Add" HorizontalAlignment="Left" Height="20" Margin="220,26,0,0" VerticalAlignment="Top" Width="40" x:Name="btnAddIngredient" Click="addNewIngredient" Grid.Column="2"/>
+							<ListView x:Name="listViewIngredients" Margin="9,56,22,17" Grid.RowSpan="2" Grid.ColumnSpan="3">
+								<ListView.View>
+									<GridView>
+										<GridViewColumn Header="Name" DisplayMemberBinding="{Binding Name}" Width="60"/>
+										<GridViewColumn Header="Region" DisplayMemberBinding="{Binding Region}" Width="60"/>
+										<GridViewColumn Header="Price" DisplayMemberBinding="{Binding Price}" Width="60"/>
+										<GridViewColumn Header="Stock" DisplayMemberBinding="{Binding Stock}" Width="60"/>
+										<GridViewColumn Header="Visible" Width="60">
+											<GridViewColumn.CellTemplate>
+												<DataTemplate>
+													<CheckBox Tag="{Binding Id}" IsChecked="{Binding IsVisible}" Checked="SetIngredientVisibility" Unchecked="SetIngredientVisibility"/>
+												</DataTemplate>
+											</GridViewColumn.CellTemplate>
+										</GridViewColumn>
+										<GridViewColumn Header="Deleted" Width="50">
+											<GridViewColumn.CellTemplate>
+												<DataTemplate>
+													<Button Content="X" Background="Red" BorderBrush="Red" FontWeight="Bold" Padding="5,2" CommandParameter="{Binding Id}" Click="deleteIngredient"/>
+												</DataTemplate>
+											</GridViewColumn.CellTemplate>
+										</GridViewColumn>
+									</GridView>
+								</ListView.View>
+							</ListView>
+							<TextBox HorizontalAlignment="Left" Height="20" Margin="160,26,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="40" x:Name="txtIngredientPrice" Grid.Column="2"/>
+							<TextBox HorizontalAlignment="Left" Height="20" Margin="39,26,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="106" x:Name="txtIngredientRegion" Grid.Column="2"/>
+							<Label Content="Ingredient" HorizontalAlignment="Left" Height="26" Margin="1,3,0,0" VerticalAlignment="Top" Width="76" Grid.ColumnSpan="2"/>
+							<Label Content="Region" HorizontalAlignment="Left" Height="27" Margin="34,3,0,0" VerticalAlignment="Top" Width="62" Grid.Column="2"/>
+							<Label Content="Price" HorizontalAlignment="Left" Height="27" Margin="154,3,0,0" VerticalAlignment="Top" Width="62" Grid.Column="2"/>
+						</Grid>
+					</GroupBox>
+				</Grid>
+			</TabItem>
+		</TabControl>
+
+	</Grid>
+</Window>
